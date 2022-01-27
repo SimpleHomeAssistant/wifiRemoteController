@@ -35,6 +35,6 @@
 #include "mqtt_client.h"
 
 
-#define CONFIG_BROKER_URL "49.232.13.66:1883"
+#define MQTT_BROKER_URL "mqtt://49.232.13.66:1883"
 
 void mqtt_start(void);
