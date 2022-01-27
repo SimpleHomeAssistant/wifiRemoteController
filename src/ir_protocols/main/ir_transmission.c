@@ -6,14 +6,7 @@
    software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
    CONDITIONS OF ANY KIND, either express or implied.
 */
-#include <stdio.h>
-#include <string.h>
-#include "sdkconfig.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_log.h"
-#include "driver/rmt.h"
-#include "ir_tools.h"
+#include "ir_transmission.h"
 
 static const char *TAG = "example";
 
@@ -24,7 +17,7 @@ static rmt_channel_t example_rx_channel = RMT_CHANNEL_2;
  * @brief RMT Receive Task
  *
  */
-static void example_ir_rx_task(void *arg)
+void ir_rx_task(void *arg)
 {
     uint32_t addr = 0;
     uint32_t cmd = 0;
@@ -39,9 +32,9 @@ static void example_ir_rx_task(void *arg)
     ir_parser_config_t ir_parser_config = IR_PARSER_DEFAULT_CONFIG((ir_dev_t)example_rx_channel);
     ir_parser_config.flags |= IR_TOOLS_FLAGS_PROTO_EXT; // Using extended IR protocols (both NEC and RC5 have extended version)
     ir_parser_t *ir_parser = NULL;
-#if CONFIG_EXAMPLE_IR_PROTOCOL_NEC
+#if 1 // CONFIG_EXAMPLE_IR_PROTOCOL_NEC
     ir_parser = ir_parser_rmt_new_nec(&ir_parser_config);
-#elif CONFIG_EXAMPLE_IR_PROTOCOL_RC5
+#else  // CONFIG_EXAMPLE_IR_PROTOCOL_RC5
     ir_parser = ir_parser_rmt_new_rc5(&ir_parser_config);
 #endif
 
@@ -72,7 +65,7 @@ static void example_ir_rx_task(void *arg)
  * @brief RMT Transmit Task
  *
  */
-static void example_ir_tx_task(void *arg)
+void ir_tx_task(void *arg)
 {
     uint32_t addr = 0x10;
     uint32_t cmd = 0x20;
@@ -109,10 +102,4 @@ static void example_ir_tx_task(void *arg)
     ir_builder->del(ir_builder);
     rmt_driver_uninstall(example_tx_channel);
     vTaskDelete(NULL);
-}
-
-void app_main(void)
-{
-    xTaskCreate(example_ir_rx_task, "ir_rx_task", 2048, NULL, 10, NULL);
-    xTaskCreate(example_ir_tx_task, "ir_tx_task", 2048, NULL, 10, NULL);
 }
