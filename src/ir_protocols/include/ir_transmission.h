@@ -21,5 +21,8 @@
 #include "driver/rmt.h"
 #include "ir_tools.h"
 
+#define IR_TX_GPIO 18
+#define IR_RX_GPIO 19
+
 void ir_rx_task(void *arg);
 void ir_tx_task(void *arg);

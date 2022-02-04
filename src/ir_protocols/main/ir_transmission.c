@@ -26,7 +26,7 @@ void ir_rx_task(void *arg)
     RingbufHandle_t rb = NULL;
     rmt_item32_t *items = NULL;
 
-    rmt_config_t rmt_rx_config = RMT_DEFAULT_CONFIG_RX(CONFIG_EXAMPLE_RMT_RX_GPIO, example_rx_channel);
+    rmt_config_t rmt_rx_config = RMT_DEFAULT_CONFIG_RX(IR_RX_GPIO, example_rx_channel);
     rmt_config(&rmt_rx_config);
     rmt_driver_install(example_rx_channel, 1000, 0);
     ir_parser_config_t ir_parser_config = IR_PARSER_DEFAULT_CONFIG((ir_dev_t)example_rx_channel);
@@ -73,7 +73,7 @@ void ir_tx_task(void *arg)
     size_t length = 0;
     ir_builder_t *ir_builder = NULL;
 
-    rmt_config_t rmt_tx_config = RMT_DEFAULT_CONFIG_TX(CONFIG_EXAMPLE_RMT_TX_GPIO, example_tx_channel);
+    rmt_config_t rmt_tx_config = RMT_DEFAULT_CONFIG_TX(IR_TX_GPIO, example_tx_channel);
     rmt_tx_config.tx_config.carrier_en = true;
     rmt_config(&rmt_tx_config);
     rmt_driver_install(example_tx_channel, 0, 0);
