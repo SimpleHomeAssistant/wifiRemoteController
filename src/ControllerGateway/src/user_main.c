@@ -3,7 +3,7 @@
 #include "user_config.h"
 #include "driver/oled.h"
 #include "uart.h"
-
+#include "driver/infrared.h"
 
 
 /******************************************************************************
@@ -60,4 +60,11 @@ void user_init(void * ignore)
     os_delay_us(10000);
     OLED_Init();
     OLED_ShowString( 0, 0, "Hello ESP8266!" );
+    infrared_init();
+    
+    OLED_ShowString( 0, 4, "Infrared Init!" );
+    
+    while (1) {
+        vTaskDelay(1000 / portTICK_RATE_MS);
+    }
 }
