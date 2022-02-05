@@ -26,10 +26,10 @@ static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event)
     switch (event->event_id) {
         case MQTT_EVENT_CONNECTED:
             ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-            msg_id = esp_mqtt_client_publish(client, "sha/device/esp32controller/online", "to_do_my_ip_here", 0, 1, 0);
+            msg_id = esp_mqtt_client_publish(client, MQTT_CONTROLLER_ONLINE_TOPIC, "to_do_my_ip_here", 0, 1, 0);
             ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
 
-            msg_id = esp_mqtt_client_subscribe(client, "sha/controller/command/ir", 0);
+            msg_id = esp_mqtt_client_subscribe(client, MQTT_IR_CONTROL_TOPIC, 0);
             ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
 
 //            msg_id = esp_mqtt_client_subscribe(client, "topic/qos1", 1);
@@ -57,6 +57,10 @@ static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event)
             ESP_LOGI(TAG, "MQTT_EVENT_DATA");
             printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
             printf("DATA=%.*s\r\n", event->data_len, event->data);
+            if (strcmp(event->topic, MQTT_IR_CONTROL_TOPIC))
+            {
+            	//todo handle ir command
+            }
             break;
         case MQTT_EVENT_ERROR:
             ESP_LOGI(TAG, "MQTT_EVENT_ERROR");

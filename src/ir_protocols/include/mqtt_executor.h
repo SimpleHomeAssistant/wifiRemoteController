@@ -36,5 +36,7 @@
 
 
 #define MQTT_BROKER_URL "mqtt://49.232.13.66:1883"
+#define MQTT_IR_CONTROL_TOPIC "sha/controller/dev/command/ir"
+#define MQTT_CONTROLLER_ONLINE_TOPIC "sha/controller/dev/online"
 
 void mqtt_start(void);
