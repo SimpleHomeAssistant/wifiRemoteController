@@ -79,26 +79,23 @@ void ir_tx_task(void *arg)
     rmt_driver_install(example_tx_channel, 0, 0);
     ir_builder_config_t ir_builder_config = IR_BUILDER_DEFAULT_CONFIG((ir_dev_t)example_tx_channel);
     ir_builder_config.flags |= IR_TOOLS_FLAGS_PROTO_EXT; // Using extended IR protocols (both NEC and RC5 have extended version)
-#if CONFIG_EXAMPLE_IR_PROTOCOL_NEC
+#if 1
     ir_builder = ir_builder_rmt_new_nec(&ir_builder_config);
 #elif CONFIG_EXAMPLE_IR_PROTOCOL_RC5
     ir_builder = ir_builder_rmt_new_rc5(&ir_builder_config);
 #endif
-    while (1) {
-        vTaskDelay(pdMS_TO_TICKS(2000));
-        ESP_LOGI(TAG, "Send command 0x%x to address 0x%x", cmd, addr);
-        // Send new key code
-        ESP_ERROR_CHECK(ir_builder->build_frame(ir_builder, addr, cmd));
-        ESP_ERROR_CHECK(ir_builder->get_result(ir_builder, &items, &length));
-        //To send data according to the waveform items.
-        rmt_write_items(example_tx_channel, items, length, false);
-        // Send repeat code
-        vTaskDelay(pdMS_TO_TICKS(ir_builder->repeat_period_ms));
-        ESP_ERROR_CHECK(ir_builder->build_repeat_frame(ir_builder));
-        ESP_ERROR_CHECK(ir_builder->get_result(ir_builder, &items, &length));
-        rmt_write_items(example_tx_channel, items, length, false);
-        cmd++;
-    }
+	vTaskDelay(pdMS_TO_TICKS(2000));
+	ESP_LOGI(TAG, "Send command 0x%x to address 0x%x", cmd, addr);
+	// Send new key code
+	ESP_ERROR_CHECK(ir_builder->build_frame(ir_builder, addr, cmd));
+	ESP_ERROR_CHECK(ir_builder->get_result(ir_builder, &items, &length));
+	//To send data according to the waveform items.
+	rmt_write_items(example_tx_channel, items, length, false);
+	// Send repeat code
+	vTaskDelay(pdMS_TO_TICKS(ir_builder->repeat_period_ms));
+	ESP_ERROR_CHECK(ir_builder->build_repeat_frame(ir_builder));
+	ESP_ERROR_CHECK(ir_builder->get_result(ir_builder, &items, &length));
+	rmt_write_items(example_tx_channel, items, length, false);
     ir_builder->del(ir_builder);
     rmt_driver_uninstall(example_tx_channel);
     vTaskDelete(NULL);
