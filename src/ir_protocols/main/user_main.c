@@ -15,6 +15,6 @@ void app_main(void)
 {
 	wifi_init_sta();
 	mqtt_start();  //todo handle command
-    xTaskCreate(ir_rx_task, "ir_rx_task", 2048, NULL, 10, NULL);
+    //xTaskCreate(ir_rx_task, "ir_rx_task", 2048, NULL, 10, NULL);
     //xTaskCreate(ir_tx_task, "ir_tx_task", 2048, NULL, 10, NULL);
 }

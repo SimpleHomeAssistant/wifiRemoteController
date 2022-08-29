@@ -7,6 +7,8 @@
 
 
 #include "mqtt_executor.h"
+#include "ir_transmission.h"
+
 
 static const char *TAG = "MQTT_EXAMPLE";
 
@@ -60,6 +62,7 @@ static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event)
             if (strcmp(event->topic, MQTT_IR_CONTROL_TOPIC))
             {
             	//todo handle ir command
+            	printf("todo handle topic\r\n");
             }
             break;
         case MQTT_EVENT_ERROR:
